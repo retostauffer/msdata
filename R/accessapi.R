@@ -59,8 +59,8 @@ items_extract_features <- function(x) {
     fn <- function(x) return(c(x[atom], x$properties))
     d <- as.data.frame(bind_rows(lapply(x, fn)))
     d <- cbind(coord, d)
-
     d <- autoconvert_datetime(d)
+    d$assets <- assets(lapply(x, function(y) y$assets))
 
     return(d)
 }
