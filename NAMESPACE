@@ -2,11 +2,11 @@
 
 export(ms_assets)
 export(ms_collections)
-export(ms_stations)
+export(ms_items)
 importFrom(dplyr,bind_rows)
 importFrom(httr,GET)
 importFrom(httr,content)
-importFrom(lubridate,ymd_hms)
+importFrom(parsedate,parse_iso_8601)
 importFrom(sf,st_as_sfc)
 importFrom(sf,st_crs)
 importFrom(stats,setNames)
