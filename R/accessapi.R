@@ -9,6 +9,13 @@
 #'
 #' @return Character of length one with the URL of the API end point.
 #'
+#' @details On loading the package sets the option `"msdata.apiurl"`
+#' with the main entry point to the API. This is used inside this
+#' function (i.e., by the entire package) to talk to the API.
+#'
+#' This would allow users to change the end-point (or version)
+#' without updating the package, e.g., for testing.
+#'
 #' @examples
 #' ## Base URL
 #' ms_api_url()
@@ -20,6 +27,15 @@
 #' ms_api_url("/ch.meteoschweiz.ogd-smn")
 #' ms_api_url(c("ch.meteoschweiz.ogd-smn", "items"))
 #'
+#' ## Changing default API URL. Possible, but not a standard use-case.
+#' hold_apiurl <- getOption("msdata.apiurl") # kept for resetting
+#' options(msdata.apiurl = "https://some.new.domain/api/stac/v5")
+#' ms_api_url()
+#'
+#' ## Setting back to defaults
+#' options(msdata.apiurl = hold_apiurl)
+#' ms_api_url()
+#'
 #' @author Reto
 ms_api_url <- function(x = NULL, version = 1L) {
     version <- as.integer(version)[1L]
@@ -30,12 +46,12 @@ ms_api_url <- function(x = NULL, version = 1L) {
             is.integer(version) && version > 0L
     )
 
-    baseurl <- sprintf("https://data.geo.admin.ch/api/stac/v%d", version)
-    if (is.null(x)) return(baseurl)
+    apiurl <- getOption("msdata.apiurl")
+    if (is.null(x)) return(apiurl)
 
     # Else extending the URL
     if (!substr(x[[1]], 0, 1) == "/") x[[1]] <- paste0("/", x[[1]])
-    return(paste0(baseurl, paste(x, collapse = "/")))
+    return(paste0(apiurl, paste(x, collapse = "/")))
 }
 
 # Helper function to extract station information from an item
