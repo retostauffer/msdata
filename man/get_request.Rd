@@ -4,7 +4,14 @@
 \alias{get_request}
 \title{Get Request Helper Function}
 \usage{
-get_request(url, query = NULL, ...)
+get_request(
+  url,
+  query = NULL,
+  paging = FALSE,
+  limit = 100L,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{url}{character, URL to send the request to. Can contain
@@ -14,6 +21,18 @@ get parameters in the URL.}
 with the request. Warning: If the URL contains get requests and
 \code{query} is not \code{NULL}, the parameters in the URL (\code{url}) will
 be overwritten!}
+
+\item{paging}{logical, defaults to \code{FALSE}. If \code{TRUE} we will send
+an initial request is sent to the \code{url} which returns a
+maximum of 100 entries. It is then checked if a 'next'
+link is included in the response used to request the
+next batch of up to 100 entries until finished.}
+
+\item{limit}{integer, defaults to \code{100L}. Number of entries to
+be requested if \code{paging = TRUE}.}
+
+\item{verbose}{logical, defaults to \code{FALSE}. If set \code{TRUE} the
+some messages are printed.}
 }
 \value{
 List with the decoded information.
@@ -24,7 +43,12 @@ Auxilary function to send GET requests with additional error handling.
 \details{
 We are expecting a JSON response from the API, thus
 we expect that the request content is decoded to a list by the
-httr package. If we do not get a proper HTTP status code, or
+httr package. IF \code{paging = FALSE} this list is returned.
+If \code{paging = TRUE} a list of lists is returned, where each
+element in the main list contains the results of one API call
+following the 'next' links (see argument \code{paging}).
+
+If we do not get a proper HTTP status code, or
 the extracted content is not a list, this function will throw
 an error.
 }

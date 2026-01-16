@@ -4,13 +4,16 @@
 \alias{ms_stations}
 \title{Available Automated Weather Stations}
 \usage{
-ms_stations(url = NULL)
+ms_stations(url = NULL, verbose = FALSE)
 }
 \arguments{
 \item{url}{\code{NULL} or an URL TODO: If we need to retrieve
 data from other collections we may better go for a 'collection'
 argument, for now only tested \code{ch.meteoschweiz.ogd-smn} which is
 specified internally.}
+
+\item{verbose}{logical, defaults to \code{FALSE}. If set \code{TRUE} the
+some messages are printed.}
 }
 \value{
 A simple feature data frame with station name, id, and its
