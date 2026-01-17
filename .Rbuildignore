@@ -2,4 +2,5 @@
 ^MAKEFILE$
 ^README.md$
 ^test.R$
+^test_swissgd.R$
 

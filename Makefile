@@ -21,9 +21,9 @@ devcheck: document
 	Rscript -e "devtools::check()"
 
 test: install
-	Rscript -e "tinytest::test_package('msdata')"
+	Rscript -e "tinytest::test_package('swissgeo')"
 testwarn: install
-	Rscript -e "tinytest::test_package('msdata'); warnings()"
+	Rscript -e "tinytest::test_package('swissgeo'); warnings()"
 
 coverage: install
 	Rscript -e 'covr::report(covr::package_coverage(), file = "../coverage.html")'
@@ -35,8 +35,8 @@ packageversion:=$(shell cat DESCRIPTION | egrep Version | sed 's/Version://g')
 
 build: document
 	cd ../ && \
-	R CMD build msdata
+	R CMD build swissgeo
 check: build
 	cd ../ && \
-	R CMD check msdata_$(shell printf "%s"${packageversion}).tar.gz
-	#R CMD check --as-cran msdata_$(shell printf "%s"${packageversion}).tar.gz
+	R CMD check swissgeo_$(shell printf "%s"${packageversion}).tar.gz
+	#R CMD check --as-cran swissgeo_$(shell printf "%s"${packageversion}).tar.gz

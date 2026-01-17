@@ -1,4 +1,4 @@
-Package: msdata
+Package: swissgeo
 Type: Package
 Title: Interface to the Geoportal des Bundes (Swiss Federal Government Open Data Portal)
 Version: 0.0-9000
@@ -7,10 +7,10 @@ Authors@R: person(given = "Reto", family = "Stauffer", role = c("aut", "cre"),
                   email = "reto.stauffer@uibk.ac.at",
                   comment = c(ORCID = "0000-0002-3798-5507"))
 Maintainer: Reto Stauffer <reto.stauffer@uibk.ac.at>
-Depends: httr, sf, parsedate, dplyr
-Suggests: utils, tinytest, knitr
+Depends: httr, sf, parsedate, dplyr, utils
+Suggests: tinytest, knitr
 Description: Package to download data from data.geo.admin.ch.
-URL: https://retostauffer.github.io/msdata
+URL: https://retostauffer.github.io/swissgeo
 License: GPL-2
 VignetteBuilder: knitr
 RoxygenNote: 7.3.3

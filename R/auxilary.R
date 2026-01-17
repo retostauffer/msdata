@@ -16,8 +16,15 @@
 # Show http_status message if possible.
 show_http_status_and_terminate <- function(scode, xtra = NULL) {
 
-    stopifnot(is.numeric(scode), length(scode) == 1)
+    stopifnot("argument 'scode' must be numeric of length 1L" =
+              is.numeric(scode), length(scode) == 1)
     if (scode %/% 100 == 2) return(NULL)
+
+    # Given we have to deal with the return code, ensure
+    # 'xtra' is a named list or NULL
+    stopifnot("argument 'xtra' must be NULL or a named list of length > 0L" =
+        is.null(xtra) || (is.list(xtra) && !is.null(names(xtra)) && length(xtra) > 0L))
+
     cat('---\n')
 
     info <- tryCatch(http_status(scode),

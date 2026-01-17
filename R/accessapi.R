@@ -1,5 +1,5 @@
 
-#' data.geo.admin.ch API URL
+#' Generate Geoportal API
 #'
 #' @param x if `NULL` (default) the base URL is returned.
 #'        If character, the base URL is extended. If `x` is
@@ -9,7 +9,7 @@
 #'
 #' @return Character of length one with the URL of the API end point.
 #'
-#' @details On loading the package sets the option `"msdata.apiurl"`
+#' @details On loading the package sets the option `"swissgeo.apiurl"`
 #' with the main entry point to the API. This is used inside this
 #' function (i.e., by the entire package) to talk to the API.
 #'
@@ -18,27 +18,27 @@
 #'
 #' @examples
 #' ## Base URL
-#' ms_api_url()
+#' sg_api_url()
 #' ## Base URL with different API version
-#' ms_api_url(version = 2L)
+#' sg_api_url(version = 2L)
 #'
 #' ## Extending the base URL to point to a specific API endpoint
-#' ms_api_url("ch.meteoschweiz.ogd-smn")
-#' ms_api_url("/ch.meteoschweiz.ogd-smn")
-#' ms_api_url(c("ch.meteoschweiz.ogd-smn", "items"))
+#' sg_api_url("ch.meteoschweiz.ogd-smn")
+#' sg_api_url("/ch.meteoschweiz.ogd-smn")
+#' sg_api_url(c("ch.meteoschweiz.ogd-smn", "items"))
 #'
 #' ## Changing default API URL. Possible, but not a standard use-case.
-#' hold_apiurl <- getOption("msdata.apiurl") # kept for resetting
-#' options(msdata.apiurl = "https://some.new.domain/api/stac/v5")
-#' ms_api_url()
+#' hold_apiurl <- getOption("swissgeo.apiurl") # kept for resetting
+#' options(swissgeo.apiurl = "https://some.new.domain/api/stac/v5")
+#' sg_api_url()
 #'
 #' ## Setting back to defaults
-#' options(msdata.apiurl = hold_apiurl)
-#' ms_api_url()
+#' options(swissgeo.apiurl = hold_apiurl)
+#' sg_api_url()
 #'
 #' @author Reto
 #' @export
-ms_api_url <- function(x = NULL, version = 1L) {
+sg_api_url <- function(x = NULL, version = 1L) {
     version <- as.integer(version)[1L]
     stopifnot(
         "argument 'x' must be NULL or character vector, no empty strings allowed" =
@@ -47,7 +47,7 @@ ms_api_url <- function(x = NULL, version = 1L) {
             is.integer(version) && version > 0L
     )
 
-    apiurl <- getOption("msdata.apiurl")
+    apiurl <- getOption("swissgeo.apiurl")
     if (is.null(x)) return(apiurl)
 
     # Else extending the URL
@@ -277,7 +277,7 @@ get_link_next <- function(x) {
 #' @examples
 #' \dontrun{
 #' ## Fetch all available collections
-#' collections <- ms_collections()
+#' collections <- sg_collections()
 #'
 #' ## Extract collections by MeteoSchweiz
 #' subset(res, grepl("meteoschweiz", id))
@@ -287,7 +287,7 @@ get_link_next <- function(x) {
 #' @author Reto
 #'
 #' @importFrom dplyr bind_rows
-ms_collections <- function(verbose = FALSE, raw = FALSE) {
+sg_collections <- function(verbose = FALSE, raw = FALSE) {
 
     stopifnot("argument 'raw' must be TRUE or FALSE" = isTRUE(raw) || isFALSE(raw))
 
@@ -295,7 +295,7 @@ ms_collections <- function(verbose = FALSE, raw = FALSE) {
 
     # Downloading the data from the API. Each time the API returns up to
     # 100 items, paging = TRUE calls the API until all items are fetched.
-    url <- ms_api_url("collections")
+    url <- sg_api_url("collections")
     res <- get_request(url, paging = TRUE, verbose = verbose)
 
     extractfun <- function(x) {
@@ -325,7 +325,7 @@ ms_collections <- function(verbose = FALSE, raw = FALSE) {
 #' Retrieving all items of a specific collection.
 #'
 #' @param id character, ID of the collection for which to retrieve
-#'        the items (see [ms_collections()]).
+#'        the items (see [sg_collections()]).
 #' @param verbose logical, defaults to `FALSE`. If set `TRUE` the
 #'        some messages are printed.
 #' @param raw logical, defaults to `FALSE` (see Return).
@@ -339,7 +339,7 @@ ms_collections <- function(verbose = FALSE, raw = FALSE) {
 #'
 #' @importFrom stats setNames
 #' @importFrom sf st_as_sf st_crs
-ms_items <- function(id, verbose = FALSE, raw = FALSE) {
+sg_items <- function(id, verbose = FALSE, raw = FALSE) {
 
     stopifnot(
         "argument 'id' must be character of length 1" = 
@@ -348,7 +348,7 @@ ms_items <- function(id, verbose = FALSE, raw = FALSE) {
     )
 
     # Generate expected API end point
-    url <- ms_api_url(c("collections", id, "items"))
+    url <- sg_api_url(c("collections", id, "items"))
 
     if (verbose) message("Retrieving items")
 
@@ -382,7 +382,7 @@ ms_items <- function(id, verbose = FALSE, raw = FALSE) {
 #' Retrieving all assets of a specific collection.
 #'
 #' @param id character, ID of the collection for which to retrieve
-#'        the items (see [ms_collections()]).
+#'        the items (see [sg_collections()]).
 #' @param verbose logical, defaults to `FALSE`. If set `TRUE` the
 #'        some messages are printed.
 #' @param raw logical, defaults to `FALSE` (see Return).
@@ -395,7 +395,7 @@ ms_items <- function(id, verbose = FALSE, raw = FALSE) {
 #' @author Reto
 #'
 #' @importFrom dplyr bind_rows
-ms_assets <- function(id, verbose = FALSE, raw = FALSE) {
+sg_assets <- function(id, verbose = FALSE, raw = FALSE) {
 
     stopifnot(
         "argument 'id' must be character of length 1" = 
@@ -404,7 +404,7 @@ ms_assets <- function(id, verbose = FALSE, raw = FALSE) {
     )
 
     # Generate expected API end point
-    url <- ms_api_url(c("collections", id, "assets"))
+    url <- sg_api_url(c("collections", id, "assets"))
     print(url)
 
     if (verbose) message("Retrieving items")
@@ -431,7 +431,7 @@ ms_assets <- function(id, verbose = FALSE, raw = FALSE) {
 ##  #' Downloading data inventory of a specific data set collection.
 ##  #'
 ##  #' @param id character, ID of the collection for which to retrieve
-##  #'        the items (see [ms_collections()]).
+##  #'        the items (see [sg_collections()]).
 ##  #' @param verbose logical, defaults to `FALSE`. If set `TRUE` the
 ##  #'        some messages are printed.
 ##  #'
@@ -444,7 +444,7 @@ ms_assets <- function(id, verbose = FALSE, raw = FALSE) {
 ##  #'
 ##  #' @importFrom stats setNames
 ##  #' @importFrom utils read.csv2
-##  ms_inventory <- function(id, verbose = FALSE, raw = FALSE) {
+##  sg_inventory <- function(id, verbose = FALSE, raw = FALSE) {
 ##
 ##      stopifnot(
 ##          "argument 'id' must be character of length 1" =
@@ -453,7 +453,7 @@ ms_assets <- function(id, verbose = FALSE, raw = FALSE) {
 ##      )
 ##
 ##      # Generate expected API end point
-##      url <- ms_api_url(c("collections", id, "assets"))
+##      url <- sg_api_url(c("collections", id, "assets"))
 ##
 ##      if (verbose) message("Retrieving items")
 ##
