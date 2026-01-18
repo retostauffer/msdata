@@ -2,6 +2,7 @@
 
 /test.R
 /test_*.R
+/coverage.html
 
 # Folder for storing assets/data sets, used for testing.
 /_data

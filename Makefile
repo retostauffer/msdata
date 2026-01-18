@@ -26,7 +26,7 @@ testwarn: install
 	Rscript -e "tinytest::test_package('swissgeo'); warnings()"
 
 coverage: install
-	Rscript -e 'covr::report(covr::package_coverage(), file = "../coverage.html")'
+	Rscript -e 'covr::report(covr::package_coverage(), file = "coverage.html")'
 
 # ---------------------------------------------------
 # R CMD build and check ## --as-cran removed

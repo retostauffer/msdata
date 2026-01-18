@@ -4,4 +4,5 @@
 ^test.R$
 ^test_swissgd.R$
 ^_data$
+^coverage.html$
 
