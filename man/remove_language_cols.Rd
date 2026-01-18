@@ -7,14 +7,15 @@
 remove_language_cols(x, lang)
 }
 \arguments{
-\item{x}{a data frame.}
+\item{x}{data frame to be checked and potentially modified.}
 
 \item{lang}{character, languages to keep. If \code{"all"} no
 modifications are done. Else trying to remove
 all columns not matching the requested \code{lang}.}
-
-\item{A}{data frame, potentially modified by removing
-all columns not matching the requested language.}
+}
+\value{
+A data frame, potentially modified by removing
+all columns not matching the requested language.
 }
 \description{
 Removing Non-required Language-specific Variables

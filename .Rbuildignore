@@ -3,4 +3,5 @@
 ^README.md$
 ^test.R$
 ^test_swissgd.R$
+^_data$
 

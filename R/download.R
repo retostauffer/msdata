@@ -1,6 +1,7 @@
 
 
-
+#' Download (Cache) and Import Assets/Data Sets
+#'
 #' @param x data frame (with one row) or list containing
 #'        at least the following variables: id, type, href, file_checksum.
 #' @param dir character, name/path to a directory to cache the
@@ -28,9 +29,12 @@
 #' a new file will be created every time the checksum changes.
 #'
 #' @author Reto
+#' @export
 #'
 #' @importFrom httr GET write_disk status_code
-download_asset <- function(x, dir = NULL, language = c("all", "en", "de", "fr", "it"), verbose = FALSE) {
+#' @importFrom utils read.csv2
+#' @importFrom dplyr as_tibble
+sg_download_asset <- function(x, dir = NULL, language = c("all", "en", "de", "fr", "it"), verbose = FALSE) {
 
     # Sanity checks
     stopifnot(
@@ -90,12 +94,12 @@ download_asset <- function(x, dir = NULL, language = c("all", "en", "de", "fr", 
 
 #' Removing Non-required Language-specific Variables
 #'
-#' @param x a data frame.
+#' @param x data frame to be checked and potentially modified.
 #' @param lang character, languages to keep. If `"all"` no
 #'        modifications are done. Else trying to remove
 #'        all columns not matching the requested `lang`.
 #'
-#' @param A data frame, potentially modified by removing
+#' @return A data frame, potentially modified by removing
 #' all columns not matching the requested language.
 #'
 #' @author Reto
