@@ -295,8 +295,6 @@ sg_items <- function(id, verbose = FALSE, raw = FALSE) {
         res <- st_as_sf(res, coords = c("lon", "lat"), crs = st_crs(4326))
     }
 
-    # TODO: Currently that is still the raw list; check other
-    # collections to see what types we have, and what we can return.
     return(res)
 }
 
@@ -330,7 +328,6 @@ sg_assets <- function(id, verbose = FALSE, raw = FALSE) {
 
     # Generate expected API end point
     url <- sg_api_url("collections", id, "assets")
-    print(url)
 
     if (verbose) message("Retrieving items") # nocov
 
@@ -348,6 +345,7 @@ sg_assets <- function(id, verbose = FALSE, raw = FALSE) {
     }
     res <- bind_rows(lapply(res, function(x) lapply(x$assets, fn)))
     names(res) <- gsub("\\:", "_", names(res))
+
     return(autoconvert_datetime(res))
 }
 

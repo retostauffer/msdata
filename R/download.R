@@ -61,32 +61,38 @@ sg_download_asset <- function(x, dir = NULL, language = c("all", "en", "de", "fr
         "empty characters in 'x' not allowed" = all(sapply(x, nchar) > 0L)
     )
 
-    # Define local file name (NULL if not used)
+    # Define local file name. If `is.null(dir)` that local file
+    # is just a temporary file and will be deleted at the end.
     x$local_file <- if (is.null(dir)) {
-        NULL
+        fileext <- regmatches(x$id, regexpr("\\.\\w{0,8}$", x$id))
+        tmpfile <- tempfile(fileext = if (length(fileext) == 1L) fileext else "")
     } else {
         file.path(dir, sprintf("%s_%s", x$file_checksum, x$id))
     }
 
+
     # Shall we download and store locally?
     if (!is.null(x$local_file) && !file.exists(x$local_file)) {
-        if (verbose) message("Downloading ", x$id, " and store to ", x$local_file)
+        if (!is.null(dir) && verbose) message("Downloading ", x$id, " and store to ", x$local_file) # nocov
         req <- GET(x$href, write_disk(x$local_file))
         show_http_status_and_terminate(status_code(req), xtra = x)
     } else if (file.exists(x$local_file)) {
-        if (verbose) message("Using ", x$local_file)
+        if (verbose) message("Using ", x$local_file) # nocov
     }
 
     # Importing file
     if (x$type == "text/csv") {
-        tmp <- if (!is.null(x$local_file) && !file.exists(x$local_file)) x$local_file else x$href
-        res <- as_tibble(read.csv2(tmp, dec = ".", fileEncoding = "Latin1",
+        res <- as_tibble(read.csv2(x$local_file,
+                                   dec = ".", fileEncoding = "Latin1",
                                    na.strings = c("NA", "")))
         res <- autoconvert_datetime(res)
 
         # Removing unquired language columns
         res <- remove_language_cols(res, language)
     }
+
+    # Cleaning up
+    if (is.null(dir) && file.exists(tmpfile)) file.remove(tmpfile)
 
     return(res)
 }

@@ -13,5 +13,6 @@ Description: Package to download data from data.geo.admin.ch.
 URL: https://retostauffer.github.io/swissgeo
 License: GPL-2
 VignetteBuilder: knitr
+Encoding: Latin1
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)

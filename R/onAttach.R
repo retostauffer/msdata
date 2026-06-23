@@ -10,5 +10,10 @@
     apiurl <- sprintf("https://data.geo.admin.ch/api/stac/v%d", 1L)
     options("swissgeo.apiurl" = apiurl)
 
-    packageStartupMessage("   TODO: On load message to the API and how to cite")
+    packageStartupMessage("
+        TODO: Startup message with some information to geo.admin.ch and
+        how to cite the data if used, though that is tricky as it is
+        different for different data sets and must be found somewhere
+        on the data providers home page.
+    ")
 }
